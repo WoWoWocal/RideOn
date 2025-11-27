@@ -1,0 +1,100 @@
+```mermaid
+classDiagram
+    class User {
+        -int id
+        -string username
+        -string email
+        -string passwordHash
+        +register()
+        +login()
+        +selectLevel()
+        +startGame()
+    }
+
+    class GameSession {
+        -int id
+        -DateTime startTime
+        -DateTime endTime
+        -bool isFinished
+        +start()
+        +end()
+        +calculateScore()
+    }
+
+    class Level {
+        -int id
+        -string name
+        -string difficulty
+        -bool isRoguelike
+        +generateLayout()
+    }
+
+    class Song {
+        -int id
+        -string title
+        -int bpm
+        -int durationSeconds
+        +play()
+        +stop()
+    }
+
+    class Score {
+        -int points
+        -float hitRate
+        -int maxCombo
+        -int misses
+    }
+
+    class Scoreboard {
+        +showTopScores()
+        +addScore(score : Score)
+        +getScoresForLevel(level : Level)
+    }
+
+    class Achievement {
+        -int id
+        -string name
+        -string description
+        -string category
+        +isUnlocked(user : User, session : GameSession)
+    }
+
+    class Media {
+        -int id
+        -string type  // SONG, SFX, ...
+        -string title
+        -string filePath
+        +load()
+    }
+
+    class MediaManager {
+        +uploadSong(filePath : string)
+        +uploadSfx(filePath : string)
+        +getAllSongs()
+        +getAllSfx()
+    }
+
+    class InputHandler {
+        +checkInput()
+        +evaluateHit()
+    }
+
+    class GameUI {
+        +showMainMenu()
+        +showFeedback()
+        +showResults()
+        +showScoreboard()
+    }
+
+    %% Beziehungen
+
+    User "1" --> "0..*" GameSession : spielt
+    GameSession "1" --> "1" Level : verwendet
+    GameSession "1" --> "1" Song : spielt
+    GameSession "1" --> "1" Score : erzeugt
+    Scoreboard "1" --> "0..*" Score : verwaltet
+    User "1" --> "0..*" Achievement : schaltet frei
+    MediaManager "1" --> "0..*" Media : verwaltet
+    Media "1" --> "0..1" Song : istBasisFür
+    GameSession ..> InputHandler : nutzt
+    GameSession ..> GameUI : steuertAnzeige
