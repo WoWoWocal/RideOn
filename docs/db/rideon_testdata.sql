@@ -132,3 +132,17 @@ INSERT INTO spielrunde (
 );
 
 COMMIT;
+
+-- Beste Scores pro Level für einen Benutzer (tino in diesem Fall)
+/*
+SELECT
+    l.name       AS level_name,
+    MAX(s.gesamtpunkte) AS best_score,
+    MAX(s.trefferquote) AS best_trefferquote
+FROM spielrunde s
+JOIN spiellevel l ON s.level_id = l.level_id
+JOIN benutzer b   ON s.benutzer_id = b.benutzer_id
+WHERE b.nutzername = 'tino'
+GROUP BY l.name
+ORDER BY best_score DESC;
+*/
